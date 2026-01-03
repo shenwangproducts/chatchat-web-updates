@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .update-dialog {
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    
+    .dialog-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .update-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #4ade80 0%, #22d3ee 100%);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-size: 24px;
+    }
+    
+    .header-text h2 {
+      margin: 0;
+      color: #1f2937;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    
+    .header-text p {
+      margin: 5px 0 0;
+      color: #6b7280;
+      font-size: 14px;
+    }
+    
+    .version-card {
+      background: #f3f4f6;
+      border-radius: 12px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    
+    .version-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+      font-size: 15px;
+    }
+    
+    .current-version {
+      color: #6b7280;
+    }
+    
+    .new-version {
+      color: #059669;
+      font-weight: 600;
+    }
+    
+    .features-section {
+      margin: 20px 0;
+    }
+    
+    .features-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 12px;
+    }
+    
+    .feature-list {
+      background: #fef3c7;
+      border-radius: 12px;
+      padding: 15px;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+    
+    .feature-badge {
+      width: 24px;
+      height: 24px;
+      background: #f59e0b;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      font-size: 12px;
+      color: white;
+      flex-shrink: 0;
+    }
+    
+    .buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 25px;
+    }
+    
+    .btn {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-later {
+      background: #f3f4f6;
+      color: #4b5563;
+    }
+    
+    .btn-later:hover {
+      background: #e5e7eb;
+    }
+    
+    .btn-update {
+      background: linear-gradient(135deg, #4ade80 0%, #22d3ee 100%);
+      color: white;
+    }
+    
+    .btn-update:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(74, 222, 128, 0.3);
+    }
+    
+    .developer-note {
+      background: #e0f2fe;
+      border-radius: 12px;
+      padding: 15px;
+      margin: 20px 0;
+      font-size: 14px;
+      color: #0369a1;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="update-dialog">
+    <div class="dialog-header">
+      <div class="update-icon">🔄</div>
+      <div class="header-text">
+        <h2 id="dialog-title">มีอัพเดทใหม่!</h2>
+        <p id="dialog-subtitle">พร้อมฟีเจอร์ใหม่ล่าสุด</p>
+      </div>
+    </div>
+    
+    <div class="version-card">
+      <div class="version-row">
+        <span class="current-version">เวอร์ชันปัจจุบัน:</span>
+        <span id="current-version-display">1.7.0</span>
+      </div>
+      <div class="version-row">
+        <span class="new-version">เวอร์ชันใหม่:</span>
+        <span id="new-version-display" style="font-weight: 700;">1.8.0</span>
+      </div>
+    </div>
+    
+    <div class="features-section">
+      <div class="features-title">✨ มีอะไรใหม่บ้าง?</div>
+      <div class="feature-list" id="feature-list">
+        <!-- Features will be loaded dynamically -->
+      </div>
+    </div>
+    
+    <div class="developer-note" id="developer-note">
+      ขอบคุณที่ใช้ ChatChat! อัพเดทนี้เราปรับปรุงความเร็วและเพิ่มฟีเจอร์ใหม่
+    </div>
+    
+    <div class="buttons">
+      <button class="btn btn-later" onclick="handleLater()">⏰ เตือนภายหลัง</button>
+      <button class="btn btn-update" onclick="handleUpdate()">🔄 อัพเดทเลย</button>
+    </div>
+  </div>
+
+  <script>
+    // รับข้อมูลจาก Flutter
+    function initializeDialog(data) {
+      if (data) {
+        // อัพเดทเวอร์ชัน
+        document.getElementById('current-version-display').textContent = 
+          data.current_version || '1.7.0';
+        document.getElementById('new-version-display').textContent = 
+          data.latest_version || '1.8.0';
+        
+        // อัพเดท title
+        document.getElementById('dialog-title').textContent = 
+          data.update_message || 'มีอัพเดทใหม่!';
+        
+        // อัพเดท features
+        const featureList = document.getElementById('feature-list');
+        if (data.features && Array.isArray(data.features)) {
+          featureList.innerHTML = '';
+          data.features.slice(0, 3).forEach((feature, index) => {
+            const featureItem = document.createElement('div');
+            featureItem.className = 'feature-item';
+            featureItem.innerHTML = `
+              <div class="feature-badge">${index + 1}</div>
+              <span>${feature}</span>
+            `;
+            featureList.appendChild(featureItem);
+          });
+        }
+        
+        // อัพเดท developer note
+        if (data.developer_notes) {
+          document.getElementById('developer-note').textContent = data.developer_notes;
+        }
+      }
+    }
+
+    // เรียก initialize เมื่อโหลดเสร็จ
+    if (window.initialData) {
+      initializeDialog(window.initialData);
+    }
+
+    function handleUpdate() {
+      if (window.flutterMessage) {
+        window.flutterMessage(JSON.stringify({
+          action: 'update_now',
+          timestamp: new Date().toISOString()
+        }));
+      }
+    }
+
+    function handleLater() {
+      if (window.flutterMessage) {
+        window.flutterMessage(JSON.stringify({
+          action: 'remind_later',
+          timestamp: new Date().toISOString()
+        }));
+      }
+    }
+
+    // Expose function for Flutter to call
+    window.updateDialogData = function(data) {
+      initializeDialog(data);
+    };
+  </script>
+</body>
+</html>
