@@ -1,0 +1,51 @@
+{
+  "latest_version": "1.8.0",
+  "update_type": "optional",
+  "force_update": false,
+  "min_required_version": "1.7.0",
+  "release_date": "2024-01-15T10:00:00Z",
+  
+  "features": [
+    "เพิ่มฟีเจอร์แชทเสียง",
+    "เพิ่มการสนทนาวิดีโอกลุ่ม (สูงสุด 8 คน)",
+    "เพิ่มโหมดมืดอัตโนมัติ",
+    "เพิ่มปฏิกิริยาข้อความ (👍❤️😂😮😢😠)",
+    "ปรับปรุงความเร็วการโหลดแชท 40%"
+  ],
+  
+  "changelog": [
+    "[NEW] Added voice message recording feature",
+    "[NEW] Implemented group video calling",
+    "[NEW] Added dark mode with auto-switch",
+    "[IMPROVED] Chat loading speed optimized by 40%",
+    "[FIXED] Login issue on Android 14",
+    "[FIXED] Image sharing bug in iOS",
+    "[SECURITY] Enhanced end-to-end encryption",
+    "[UI/UX] Redesigned chat bubbles",
+    "[PERFORMANCE] Reduced app size by 15%"
+  ],
+  
+  "update_message": "🎉 ขอบคุณที่ใช้ ChatChat! อัพเดทนี้เราเพิ่มฟีเจอร์บันทึกเสียงและวิดีโอคอลกลุ่ม 🚀",
+  "download_url": "https://shenwanginteractive.itch.io/chatchat-test",
+  
+  "components": [
+    {
+      "name": "welcome_banner.html",
+      "version": "1.1",
+      "required": false,
+      "description": "แบนเนอร์ต้อนรับแบบไดนามิก"
+    },
+    {
+      "name": "update_dialog.html",
+      "version": "1.2",
+      "required": true,
+      "description": "ไดอะล็อกแจ้งอัพเดท"
+    },
+    {
+      "name": "maintenance_notice.html",
+      "version": "1.0",
+      "required": false,
+      "description": "ข้อความแจ้งปิดปรับปรุงระบบ"
+    }
+  ]
+}
