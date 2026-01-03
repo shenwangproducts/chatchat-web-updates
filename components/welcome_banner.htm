@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .welcome-banner {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    
+    .banner-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .banner-message {
+      font-size: 15px;
+      line-height: 1.5;
+      opacity: 0.9;
+      margin-bottom: 15px;
+    }
+    
+    .banner-features {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 15px;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+    }
+    
+    .feature-icon {
+      width: 28px;
+      height: 28px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      font-size: 14px;
+    }
+    
+    .app-version {
+      text-align: center;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      font-size: 13px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome-banner">
+    <div class="banner-title">
+      <span>🎉</span>
+      <span>ยินดีต้อนรับสู่ ChatChat!</span>
+    </div>
+    
+    <div class="banner-message">
+      แอพแชทที่รวดเร็ว ปลอดภัย และใช้งานง่ายที่สุด
+      พร้อมฟีเจอร์ใหม่ล่าสุดให้คุณได้สัมผัส
+    </div>
+    
+    <div class="banner-features">
+      <div class="feature-item">
+        <div class="feature-icon">🔒</div>
+        <span>เข้ารหัสปลายต่อปลาย - ปลอดภัย 100%</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">⚡</div>
+        <span>แชทเร็วแรง - ส่งข้อความทันที</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🎨</div>
+        <span>ปรับธีมได้ตามใจชอบ</span>
+      </div>
+    </div>
+    
+    <div class="app-version" id="version-info">
+      เวอร์ชัน: กำลังโหลด...
+    </div>
+  </div>
+
+  <script>
+    // รับข้อมูลจาก Flutter
+    if (window.initialData) {
+      document.getElementById('version-info').textContent = 
+        'เวอร์ชัน: ' + (window.initialData.app_version || '1.0.0');
+    }
+
+    // ส่งข้อความกลับไป Flutter เมื่อคลิก
+    document.querySelector('.welcome-banner').addEventListener('click', function() {
+      if (window.flutterMessage) {
+        window.flutterMessage(JSON.stringify({
+          action: 'banner_clicked',
+          timestamp: new Date().toISOString()
+        }));
+      }
+    });
+  </script>
+</body>
+</html>
