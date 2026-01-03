@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .maintenance-notice {
+      background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 20px;
+      margin: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      box-shadow: 0 15px 40px rgba(220, 38, 38, 0.3);
+    }
+    
+    .notice-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .warning-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 20px;
+      font-size: 28px;
+    }
+    
+    .header-text h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    
+    .header-text p {
+      margin: 8px 0 0;
+      opacity: 0.9;
+    }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .info-item {
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 15px;
+    }
+    
+    .info-label {
+      font-size: 13px;
+      opacity: 0.8;
+      margin-bottom: 5px;
+    }
+    
+    .info-value {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .affected-services {
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .services-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    
+    .service-item {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      padding: 8px 0;
+    }
+    
+    .service-status {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 12px;
+    }
+    
+    .status-up {
+      background: #4ade80;
+    }
+    
+    .status-down {
+      background: #ef4444;
+    }
+    
+    .status-partial {
+      background: #f59e0b;
+    }
+    
+    .countdown {
+      text-align: center;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .countdown-title {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+    
+    .countdown-timer {
+      font-size: 28px;
+      font-weight: 700;
+      font-family: monospace;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="maintenance-notice">
+    <div class="notice-header">
+      <div class="warning-icon">⚠️</div>
+      <div class="header-text">
+        <h2 id="maintenance-title">ปิดปรับปรุงระบบชั่วคราว</h2>
+        <p id="maintenance-subtitle">เพื่อการพัฒนาระบบให้ดียิ่งขึ้น</p>
+      </div>
+    </div>
+    
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">เวลาเริ่มต้น:</div>
+        <div class="info-value" id="start-time">01:00 น.</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">เวลาสิ้นสุด:</div>
+        <div class="info-value" id="end-time">04:00 น.</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">ระยะเวลา:</div>
+        <div class="info-value" id="duration">3 ชั่วโมง</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">วันที่:</div>
+        <div class="info-value" id="date">15 มกราคม 2024</div>
+      </div>
+    </div>
+    
+    <div class="affected-services">
+      <div class="services-title">บริการที่ได้รับผลกระทบ:</div>
+      
+      <div class="service-item">
+        <div class="service-status status-down"></div>
+        <span>ระบบแชทและข้อความ</span>
+      </div>
+      
+      <div class="service-item">
+        <div class="service-status status-down"></div>
+        <span>การแจ้งเตือน (Notifications)</span>
+      </div>
+      
+      <div class="service-item">
+        <div class="service-status status-partial"></div>
+        <span>ระบบเพื่อนและคำขอเป็นเพื่อน</span>
+      </div>
+      
+      <div class="service-item">
+        <div class="service-status status-up"></div>
+        <span>หน้าโปรไฟล์และการตั้งค่า</span>
+      </div>
+    </div>
+    
+    <div class="countdown">
+      <div class="countdown-title">ระบบจะกลับมาใช้งานอีกครั้งใน:</div>
+      <div class="countdown-timer" id="countdown-timer">03:00:00</div>
+    </div>
+  </div>
+
+  <script>
+    // ตั้งค่าเวลาเริ่มต้น
+    let endTime = new Date();
+    endTime.setHours(endTime.getHours() + 3); // อีก 3 ชั่วโมง
+    
+    function updateCountdown() {
+      const now = new Date();
+      const diff = endTime - now;
+      
+      if (diff <= 0) {
+        document.getElementById('countdown-timer').textContent = '00:00:00';
+        return;
+      }
+      
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      
+      document.getElementById('countdown-timer').textContent = 
+        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    // อัพเดท countdown ทุกวินาที
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+    
+    // รับข้อมูลจาก Flutter
+    if (window.initialData) {
+      const data = window.initialData;
+      
+      if (data.title) {
+        document.getElementById('maintenance-title').textContent = data.title;
+      }
+      
+      if (data.subtitle) {
+        document.getElementById('maintenance-subtitle').textContent = data.subtitle;
+      }
+      
+      if (data.start_time) {
+        document.getElementById('start-time').textContent = data.start_time;
+      }
+      
+      if (data.end_time) {
+        document.getElementById('end-time').textContent = data.end_time;
+        endTime = new Date(data.end_time);
+      }
+      
+      if (data.date) {
+        document.getElementById('date').textContent = data.date;
+      }
+    }
+  </script>
+</body>
+</html>
